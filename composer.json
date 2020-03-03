@@ -1,5 +1,5 @@
 {
-    "name": "acurrieclark/date-in-string",
+    "name": "acurrieclark/date-string-utilities",
     "description": "Detects English dates within strings",
     "type": "composer-plugin",
     "require-dev": {
