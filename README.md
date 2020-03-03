@@ -13,9 +13,9 @@ $date = DateInStringFinder::find($string);
 
 /**
  * [
- *      'day' => 10,
- *      'month' => 2,
- *      'year' => 2019,
+ *      'day' => 4,
+ *      'month' => 3,
+ *      'year' => 2020,
  *  ]
  */
 ```
