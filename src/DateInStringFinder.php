@@ -98,7 +98,11 @@ final class DateInStringFinder
 
         // Match 5th 1st day:
         if ($day === null) {
-            preg_match('/(\d?\d)('.implode('|', self::ORDINALS).')/', $string, $matches_day);
+            preg_match(
+                '/(\d?\d)('.implode('|', self::ORDINALS).')/',
+                $string,
+                $matches_day
+            );
             if ($matches_day && $matches_day[1]) {
                 $day = $matches_day[1];
             }
@@ -133,12 +137,16 @@ final class DateInStringFinder
     private static function getSimpleDate(string $string): ?array
     {
         // Match dates: 01/01/2012 or 30-12-11 or 1 2 1985
-        preg_match('/(\d?\d)[.\-\/ ]+([0-1]?\d)[.\-\/ ]+(\d{2,4})/', $string, $matches);
-        if ($matches[1] !== null && $matches[2] !== null && $matches[3] !== null) {
+        preg_match(
+            '/(\d?\d)[.\-\/ ]+([0-1]?\d)[.\-\/ ]+(\d{2,4})/',
+            $string,
+            $matches
+        );
+        if (($matches[1] ?? null) !== null && ($matches[2] ?? null) !== null && ($matches[3] ?? null) !== null) {
             return [
-                $matches[1],
-                $matches[2],
-                $matches[3],
+                $matches[1] ?? null,
+                $matches[2] ?? null,
+                $matches[3] ?? null,
             ];
         }
 
@@ -148,23 +156,33 @@ final class DateInStringFinder
     private static function getComplexDate(string $string): ?array
     {
         // Match dates: Sunday 1st March 2015; Sunday, 1 March 2015; Sun 1 Mar 2015; Sun-1-March-2015
-        preg_match('/(?:(?:'.implode('|', self::DAYS).'|'.implode('|', self::SHORT_DAYS).')[ ,\-_\/]*)?(\d?\d)[ ,\-_\/]*(?:'.implode('|', self::ORDINALS).')?[ ,\-_\/(?:of)]*('.implode('|', self::MONTHS).'|'.implode('|', self::SHORT_MONTHS).')(?:[ ,\-_\/]+(?:(\d{4})|\'(\d{2})))?/i', $string, $matches);
-        [$day, $month, $year] = array_slice($matches, 1, 3);
-        $year = ($year) ?: $matches[4];
+        preg_match(
+            '/(?:(?:'.implode('|', self::DAYS).'|'.implode('|', self::SHORT_DAYS).')[ ,\-_\/]*)?(\d?\d)[ ,\-_\/]*(?:'.implode('|', self::ORDINALS).')?[ ,\-_\/(?:of)]*('.implode('|', self::MONTHS).'|'.implode('|', self::SHORT_MONTHS).')(?:[ ,\-_\/]+(?:(\d{4})|\'(\d{2})))?/i',
+            $string,
+            $matches
+        );
+        $day = $matches[1] ?? null;
+        $month = $matches[2] ?? null;
+        $year = $matches[3] ?? $matches[4] ?? null;
+        $year = $year ?: $matches[4] ?? null;
         if ($month !== null) {
-            $month = self::getMonthNumber($month);
+            $month = self::getMonthNumber((string) $month);
         }
 
         // Match dates: March 1st 2015; March 1 2015; March-1st-2015
-        preg_match('/('.implode('|', self::MONTHS).'|'.implode('|', self::SHORT_MONTHS).')[ ,\-_\/]*(\d?\d)[ ,\-_\/]*(?:'.implode('|', self::ORDINALS).')?[ ,\-_\/]+(?:(\d{4})|\'(\d{2}))/i', $string, $matches);
+        preg_match(
+            '/('.implode('|', self::MONTHS).'|'.implode('|', self::SHORT_MONTHS).')[ ,\-_\/]*(\d?\d)[ ,\-_\/]*(?:'.implode('|', self::ORDINALS).')?[ ,\-_\/]+(?:(\d{4})|\'(\d{2}))/i',
+            $string,
+            $matches
+        );
         if ($matches) {
-            if ($month === null && $matches[1]) {
+            if ($month === null && isset($matches[1])) {
                 $month = self::getMonthNumber($matches[1]);
             }
 
-            $day = $day ?? $matches[2];
+            $day = $day ?? $matches[2] ?? null;
 
-            $year = ($year ?? $matches[3]) ?: $matches[4];
+            $year = ($year ?? $matches[3] ?? null) ?: $matches[4] ?? null;
         }
 
         return [
@@ -188,13 +206,21 @@ final class DateInStringFinder
     private static function getMonth(string $string): ?int
     {
         $month = null;
-        preg_match('/('.implode('|', self::MONTHS).')\b/i', $string, $matches_month_word);
+        preg_match(
+            '/('.implode('|', self::MONTHS).')\b/i',
+            $string,
+            $matches_month_word
+        );
         if ($matches_month_word && $matches_month_word[1]) {
             $month = array_search(strtolower($matches_month_word[1]), self::MONTHS);
         }
         // Match short month names
         if ($month === null) {
-            preg_match('/('.implode('|', self::SHORT_MONTHS).')\b/i', $string, $matches_month_word);
+            preg_match(
+                '/('.implode('|', self::SHORT_MONTHS).')\b/i',
+                $string,
+                $matches_month_word
+            );
             if ($matches_month_word && $matches_month_word[1]) {
                 $month = array_search(strtolower($matches_month_word[1]), self::SHORT_MONTHS);
             }
