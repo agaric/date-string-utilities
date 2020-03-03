@@ -113,6 +113,22 @@ class DateInStringFinderTest extends TestCase
                 ],
             ],
             [
+                '5 12/85',
+                [
+                    'day' => null,
+                    'month' => null,
+                    'year' => null,
+                ],
+            ],
+            [
+                '5-12/85',
+                [
+                    'day' => null,
+                    'month' => null,
+                    'year' => null,
+                ],
+            ],
+            [
                 '5 October 2012',
                 [
                     'day' => 05,
