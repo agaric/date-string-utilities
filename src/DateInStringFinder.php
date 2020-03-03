@@ -138,15 +138,15 @@ final class DateInStringFinder
     {
         // Match dates: 01/01/2012 or 30-12-11 or 1 2 1985
         preg_match(
-            '/(\d?\d)[.\-\/ ]+([0-1]?\d)[.\-\/ ]+(\d{2,4})/',
+            '/(\d?\d)([.\-\/ ])+([0-1]?\d)\2+(\d{2,4})/',
             $string,
             $matches
         );
-        if (($matches[1] ?? null) !== null && ($matches[2] ?? null) !== null && ($matches[3] ?? null) !== null) {
+        if (($matches[1] ?? null) !== null && ($matches[3] ?? null) !== null && ($matches[4] ?? null) !== null) {
             return [
                 $matches[1] ?? null,
-                $matches[2] ?? null,
                 $matches[3] ?? null,
+                $matches[4] ?? null,
             ];
         }
 
