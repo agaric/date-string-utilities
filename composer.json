@@ -1,0 +1,26 @@
+{
+    "name": "acurrieclark/date-in-string",
+    "description": "Detects English dates within strings",
+    "type": "composer-plugin",
+    "require-dev": {
+        "roave/security-advisories": "dev-master",
+        "phpunit/phpunit": "^8.0",
+        "mockery/mockery": "^1.3",
+        "larapack/dd": "^1.1"
+    },
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "Alex Currie-Clark",
+            "email": "acurrieclark@gmail.com"
+        }
+    ],
+    "autoload": {
+        "psr-4": {
+            "acurrieclark\\DateStringUtilities\\": "src"
+        }
+    },
+    "require": {
+        "php": "^7.2"
+    }
+}
