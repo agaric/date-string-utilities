@@ -157,7 +157,7 @@ final class DateInStringFinder
     {
         // Match dates: Sunday 1st March 2015; Sunday, 1 March 2015; Sun 1 Mar 2015; Sun-1-March-2015
         preg_match(
-            '/(?:(?:'.implode('|', self::DAYS).'|'.implode('|', self::SHORT_DAYS).')[ ,\-_\/]*)?(\d?\d)[ ,\-_\/]*(?:'.implode('|', self::ORDINALS).')?[ ,\-_\/(?:of)]*('.implode('|', self::MONTHS).'|'.implode('|', self::SHORT_MONTHS).')(?:[ ,\-_\/]+(?:(\d{4})|\'(\d{2})))?/i',
+            '/(?:(?:'.implode('|', self::DAYS).'|'.implode('|', self::SHORT_DAYS).')[ ,\-_\/]*)?(\d?\d)[ ,\-_\/]*(?:'.implode('|', self::ORDINALS).')?[ ,\-_\/(?:of)]*('.implode('|', self::MONTHS).'|'.implode('|', self::SHORT_MONTHS).')\b(?:[ ,\-_\/]+(?:(\d{4})|\'(\d{2})))?/i',
             $string,
             $matches
         );
@@ -171,7 +171,7 @@ final class DateInStringFinder
 
         // Match dates: March 1st 2015; March 1 2015; March-1st-2015
         preg_match(
-            '/('.implode('|', self::MONTHS).'|'.implode('|', self::SHORT_MONTHS).')[ ,\-_\/]*(\d?\d)[ ,\-_\/]*(?:'.implode('|', self::ORDINALS).')?[ ,\-_\/]+(?:(\d{4})|\'(\d{2}))/i',
+            '/('.implode('|', self::MONTHS).'|'.implode('|', self::SHORT_MONTHS).')\b[ ,\-_\/]*(\d?\d)[ ,\-_\/]*(?:'.implode('|', self::ORDINALS).')?[ ,\-_\/]+(?:(\d{4})|\'(\d{2}))/i',
             $string,
             $matches
         );
