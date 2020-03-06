@@ -129,6 +129,14 @@ class DateInStringFinderTest extends TestCase
                 ],
             ],
             [
+                'Marshgate Business Centre, 10-12 Marshgate Lane',
+                [
+                    'day' => null,
+                    'month' => null,
+                    'year' => null,
+                ],
+            ],
+            [
                 '5 October 2012',
                 [
                     'day' => 05,
