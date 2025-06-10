@@ -124,6 +124,13 @@ final class DateInStringFinder
                 $year = $matches_year[0];
             }
         }
+
+        // Only if we did not succeed in getting a year do we try to find
+        // two-digit years.  And maybe only if no day or month either?
+        if ($year === null) {
+            [$day, $month, $year] = self::getSimpleDate($string, TRUE) ?? self::getComplexDate($string, TRUE);
+        }
+
         if ($year === null) {
             preg_match('/\'(\d{2})/', $string, $matches_year);
             if ($matches_year && $matches_year[1]) {
@@ -143,11 +150,16 @@ final class DateInStringFinder
     /**
      * @return int[]|null
      */
-    private static function getSimpleDate(string $string): ?array
+    private static function getSimpleDate(string $string, bool $two_digit_year = FALSE): ?array
     {
+        $year_pattern = '(\d{4})';
+        if ($two_digit_year) {
+          $year_pattern = '(\d{2})';
+        }
+
         // Match dates: 01/01/2012 or 30-12-11 or 1 2 1985
         preg_match(
-            '/(\d?\d)([.\-\/ ])+([0-1]?\d)\2+(\d{2,4})/',
+            '/(\d?\d)([.\-\/ ])+([0-1]?\d)\2+' . $year_pattern . '/',
             $string,
             $matches
         );
@@ -162,11 +174,15 @@ final class DateInStringFinder
         return null;
     }
 
-    private static function getComplexDate(string $string): ?array
+    private static function getComplexDate(string $string, bool $two_digit_year = FALSE): ?array
     {
+        $year_pattern = '(\d{4})';
+        if ($two_digit_year) {
+          $year_pattern = '\'(\d{2})';
+        }
         // Match dates: Sunday 1st March 2015; Sunday, 1 March 2015; Sun 1 Mar 2015; Sun-1-March-2015
         preg_match(
-            '/(?:(?:'.implode('|', self::DAYS).'|'.implode('|', self::SHORT_DAYS).')[ ,\-_\/]*)?(\d?\d)[ ,\-_\/]*(?:'.implode('|', self::ORDINALS).')?[ ,\-_\/(?:of)]*('.implode('|', self::MONTHS).'|'.implode('|', self::SHORT_MONTHS).')\b(?:[ ,\-_\/]+(?:(\d{4})|\'(\d{2})))?/i',
+            '/(?:(?:'.implode('|', self::DAYS).'|'.implode('|', self::SHORT_DAYS).')[ ,\-_\/]*)?(\d?\d)[ ,\-_\/]*(?:'.implode('|', self::ORDINALS).')?[ ,\-_\/(?:of)]*('.implode('|', self::MONTHS).'|'.implode('|', self::SHORT_MONTHS).')\b(?:[ ,\-_\/]+(?:' .$year_pattern . '))?/i',
             $string,
             $matches
         );
@@ -180,7 +196,7 @@ final class DateInStringFinder
 
         // Match dates: March 1st 2015; March 1 2015; March-1st-2015
         preg_match(
-            '/('.implode('|', self::MONTHS).'|'.implode('|', self::SHORT_MONTHS).')\b[ ,\-_\/]*(\d?\d)[ ,\-_\/]*(?:'.implode('|', self::ORDINALS).')?[ ,\-_\/]+(?:(\d{4})|\'(\d{2}))/i',
+            '/('.implode('|', self::MONTHS).'|'.implode('|', self::SHORT_MONTHS).')\b[ ,\-_\/]*(\d?\d)[ ,\-_\/]*(?:'.implode('|', self::ORDINALS).')?[ ,\-_\/]+(?:' . $year_pattern . ')/i',
             $string,
             $matches
         );
