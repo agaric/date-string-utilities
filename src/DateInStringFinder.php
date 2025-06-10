@@ -108,6 +108,15 @@ final class DateInStringFinder
             }
         }
 
+        // Match YYYY-MM to Year and Month if not already set:
+        if ($year === null && $month === null) {
+            preg_match('/\d{4}\-\d{2}/', $string, $matches_year_month);
+            if ($matches_year_month && $matches_year_month[0]) {
+                $year_month = $matches_year_month[0];
+                [$year, $month] = explode('-', $year_month);
+            }
+        }
+
         // Match Year if not already set:
         if ($year === null) {
             preg_match('/\d{4}/', $string, $matches_year);
