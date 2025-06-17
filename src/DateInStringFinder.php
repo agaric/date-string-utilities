@@ -90,7 +90,7 @@ final class DateInStringFinder
         $month = null;
         $year = null;
 
-        [$day, $month, $year] = self::getSimpleDate($string) ?? self::getComplexDate($string);
+        [$day, $month, $year] = self::getIsoDate($string) ?? self::getSimpleDate($string) ?? self::getComplexDate($string);
 
         // Match month name:
         if ($month === null) {
@@ -227,6 +227,26 @@ final class DateInStringFinder
             $month,
             $year,
         ];
+    }
+
+    /**
+     * @return int[]|null
+     */
+    private static function getIsoDate(string $string): ?array
+    {
+
+        // Match dates: 2025-06-30 or 2025/06/30 or 2025 06 30 as well as
+        // more unusual combinations likely in directories like 2025-06/30/19
+        preg_match('/(\d{4})[.\-\/ ](\d{2})[.\-\/ ](\d{2})/', $string, $matches);
+        if (($matches[1] ?? null) !== null && ($matches[2] ?? null) !== null && ($matches[3] ?? null) !== null) {
+            return [
+                $matches[3] ?? null,
+                $matches[2] ?? null,
+                $matches[1] ?? null,
+            ];
+        }
+
+        return null;
     }
 
     private static function getMonthNumber(string $initialMonth): ?int
