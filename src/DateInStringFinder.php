@@ -92,6 +92,12 @@ final class DateInStringFinder
 
         [$day, $month, $year] = self::getIsoDate($string) ?? self::getSimpleDate($string) ?? self::getComplexDate($string);
 
+        // Only if we did not succeed in getting a year do we try to find
+        // two-digit years.  And maybe only if no day or month either?
+        if ($year === null) {
+            [$day, $month, $year] = self::getSimpleDate($string, TRUE) ?? self::getComplexDate($string, TRUE);
+        }
+
         // Match month name:
         if ($month === null) {
             $month = self::getMonth($string);
@@ -125,12 +131,6 @@ final class DateInStringFinder
             if ($matches_year && $matches_year[0]) {
                 $year = $matches_year[0];
             }
-        }
-
-        // Only if we did not succeed in getting a year do we try to find
-        // two-digit years.  And maybe only if no day or month either?
-        if ($year === null) {
-            [$day, $month, $year] = self::getSimpleDate($string, TRUE) ?? self::getComplexDate($string, TRUE);
         }
 
         if ($year === null) {
