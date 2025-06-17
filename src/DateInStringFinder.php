@@ -110,18 +110,18 @@ final class DateInStringFinder
         }
 
         // Match YYYY-MM-DD to year, month, and day if not already set.
-        if ($year === null && $month === null) {
-            preg_match('/\d{4}[-./]d{2}[-./]d{2}/', $string, $matches_year_month_day);
+        if ($year === null && $month === null && $day === null) {
+            preg_match('/\d{4}[\-\.\/]\d{2}[\-\.\/]\d{2}/', $string, $matches_year_month_day);
             if ($matches_year_month_day && $matches_year_month_day[0]) {
                 $year_month_day = $matches_year_month_day[0];
                 $year_month_day = str_replace(['.', '/'], '-', $year_month_day);
-                [$year, $month, $day] = explode('-', $year_month);
+                [$year, $month, $day] = explode('-', $year_month_day);
             }
         }
 
         // Match YYYY-MM to Year and Month if not already set:
         if ($year === null && $month === null) {
-            preg_match('/\d{4}[-./]d{2}/', $string, $matches_year_month);
+            preg_match('/\d{4}[\-\.\/]\d{2}/', $string, $matches_year_month);
             if ($matches_year_month && $matches_year_month[0]) {
                 $year_month = $matches_year_month[0];
                 $year_month = str_replace(['.', '/'], '-', $year_month);
