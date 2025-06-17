@@ -89,6 +89,30 @@ class DateInStringFinderTest extends TestCase
                 ],
             ],
             [
+                'uploads/2025-06/17/example.pdf',
+                [
+                    'day' => 17,
+                    'month' => 06,
+                    'year' => 2025,
+                ],
+            ],
+            [
+                'uploads/2025-06/example.pdf',
+                [
+                    'day' => null,
+                    'month' => 06,
+                    'year' => 2025,
+                ],
+            ],
+            [
+                '2025-06-17',
+                [
+                    'day' => 17,
+                    'month' => 06,
+                    'year' => 2025,
+                ],
+            ],
+            [
                 '1 2 1985',
                 [
                     'day' => 01,
